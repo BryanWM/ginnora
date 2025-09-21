@@ -18,9 +18,10 @@ export const todosRoutes: FastifyPluginCallback = (
   // Exemplo de rota para obter todas as tarefas
   instance.get("/", async () => {
     // chave "await" faz a função de "esperar" a resposta de uma "promise"
-    await delay(2000); // Simulando um atraso de 2 segundos
-
-    return todos;
+    await delay(1000); // Simulando um atraso de 1 segundos
+    return todos.filter((todo, index, array) => {
+      return todo.completed === false;
+    })
   });
 
   // Exemplo de rota para criar uma nova tarefa
@@ -64,6 +65,18 @@ export const todosRoutes: FastifyPluginCallback = (
 
     return reply.send({ message: `Task with id ${id} deleted` });
   });
+
+  // Exemplo para marcar uma tarefa como concluída
+  instance.patch("/:id/done", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const todoIndex = todos.findIndex((t) => t.id === id);
+    if (todoIndex === -1) {
+      return reply.code(404).send({ message: "Task not found" });
+    }
+    todos[todoIndex].completed = true;
+    return reply.send({ message: `Task ${id} completed` });
+  }
+  )
 
   done();
 };
