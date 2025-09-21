@@ -1,0 +1,8 @@
+# pasta com todas as dependências do node
+node_modules
+
+# pasta de build do typescript
+dist
+
+# arquivos de ambiente
+.env
