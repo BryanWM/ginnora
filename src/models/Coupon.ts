@@ -78,11 +78,11 @@ export class Coupon {
     return this.max_uses - this.uses_count;
   }
   private deactivationReason?: string; // Variavel para registrar o motivo do desativamento manual
-  deactivate(reason?: string): void {
+  desactivate(reason?: string): void {
     this.active = false;
     this.deactivationReason = reason;
   }
-  getDeactivateReason(): string | undefined {
+  getDesactivateReason(): string | undefined {
     return this.deactivationReason;
   }
   toString(): string {
