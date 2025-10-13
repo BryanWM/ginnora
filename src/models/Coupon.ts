@@ -28,7 +28,65 @@ export class Coupon {
     this.active = active;
     this.uses_count = uses_count;
     this.max_uses = max_uses;
-
   }
+
+  // Métodos de Validação e Estado:
+  isExpired(): boolean {
+    return new Date() >= new Date(this.expires_at);
+  } // Verifica se o cupom já expirou
+  isActive(): boolean {
+    return this.active && !this.isExpired();
+  }// Verifica se está ativo e pode ser usado
+  isLimitReached(): boolean {
+    if (this.max_uses === undefined) return false;
+    return this.uses_count >= this.max_uses;
+  } // Verifica se já atingiu o limite
+  canUse(): boolean {
+    return this.active && !this.isExpired() && !this.isLimitReached();
+  } // Para return = true [Ativo, não expirado e não atingiu o limite]
+
+  // Metódos de Aplicação
+  use(): boolean {
+    if (!this.canUse()) {
+      this.active = false;
+      console.log("O cupom não pode ser utilizado.")
+      return false;
+    }; // Verifica se pode usar, se não desativa
+    this.uses_count++; // Se puder ser usado, incrementa +1 uso
+    if (this.isLimitReached()) {
+      this.active = false;
+      console.log("O cupom atingiu o limite de usos, desativando cupom...");
+    } else { // Caso atinja o limite, desativa o cupom
+      console.log(`Cupom utilizado com sucesso. (${this.uses_count} uso${this.uses_count > 1 ? "s" : ""})`)
+    } // Se não, aplica com sucesso.
+    return true;
+  }
+  applyDiscount(total: number): number {
+    if (this.type === "fixed") {
+      const discounted = total - this.value;
+      return Math.max(discounted, 0); // Impede o retorno negativo
+    } else if (this.type === "percent") {
+      const discounted = total * (1 - this.value / 100);
+      return Math.max(discounted, 0) // Impede o retorno negativo
+    }
+    return total;
+  }
+
+  // Metodos para usos eventuais
+  getRemainingUses(): number {
+    if (this.max_uses === undefined) return -1 //Caso o limite não seja definido.
+    return this.max_uses - this.uses_count;
+  }
+  private deactivationReason?: string; // Variavel para registrar o motivo do desativamento manual
+  desactivate(reason?: string): void {
+    this.active = false;
+    this.deactivationReason = reason;
+  } // Forçar desativação de um cupom
+  getDesactivateReason(): string | undefined {
+    return this.deactivationReason;
+  }
+  toString(): string {
+    return `Coupon ${this.code} (${this.type}: ${this.value})`;
+  } // Metodo para Debug
 
 }
