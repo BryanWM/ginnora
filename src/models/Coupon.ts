@@ -81,7 +81,7 @@ export class Coupon {
   desactivate(reason?: string): void {
     this.active = false;
     this.deactivationReason = reason;
-  }
+  } // Forçar desativação de um cupom
   getDesactivateReason(): string | undefined {
     return this.deactivationReason;
   }
