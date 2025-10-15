@@ -1,8 +1,8 @@
 import FastifySwagger from "@fastify/swagger";
 import ScalarApiReference from "@scalar/fastify-api-reference";
 
-import { todosRoutes } from "./routes/todo";
-import { server } from "./server";
+import { routes } from "../routes/routes";
+import { server } from "../server";
 
 // Código de inicialização aqui
 async function bootstrap() {
@@ -17,14 +17,14 @@ async function bootstrap() {
     });
     // Registrando Scalar API Reference (documentação da API com tema)
     await server.register(ScalarApiReference, {
-      routePrefix: "/docs",
+      routePrefix: "/",
       configuration: {
         theme: "moon",
       },
     });
 
     // Registrar rotas
-    server.register(todosRoutes, { prefix: "/todos" });
+    server.register(routes, { prefix: "/route" });
 
     server.log.info("Rotas registradas com sucesso.");
 

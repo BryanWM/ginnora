@@ -6,3 +6,5 @@ dist
 
 # arquivos de ambiente
 .env
+/src/generated/prisma
+generated
