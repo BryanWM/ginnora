@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,15 +8,25 @@ datasource db {
 }
 
 model Coupon {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  code       String
-  type       String
-  value      Int
-  created_at DateTime? @default(now())
-  expires_at DateTime
-  active     Boolean
-  uses_count Int?
-  max_uses   Int?
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  code      String    @unique
+  type      String
+  value     Int
+  active    Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
 
-  @@map("Coupons")
+  @@map("couponSchema")
+}
+
+model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("productSchema")
 }
